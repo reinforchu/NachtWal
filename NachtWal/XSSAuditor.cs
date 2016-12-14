@@ -21,7 +21,7 @@ namespace NachtWal
         {
             foreach (string key in Firewall.App.Request.QueryString.Keys)
             {
-                if (!String.IsNullOrEmpty(Firewall.App.Request.QueryString[key]) || Firewall.App.Request.QueryString[key].Length > 4)
+                if (!String.IsNullOrEmpty(Firewall.App.Request.QueryString[key]) && Firewall.App.Request.QueryString[key].Length > 4)
                 {
                     if (Regex.IsMatch(Firewall.App.Request.QueryString[key], @"[<>"";''()]"))
                     {
@@ -38,7 +38,7 @@ namespace NachtWal
         {
             foreach (string key in Firewall.App.Request.Form.Keys)
             {
-                if (!String.IsNullOrEmpty(Firewall.App.Request.Form[key]) || Firewall.App.Request.Form[key].Length > 5)
+                if (!String.IsNullOrEmpty(Firewall.App.Request.Form[key]) && Firewall.App.Request.Form[key].Length > 4)
                 {
                     if (Regex.IsMatch(Firewall.App.Request.Form[key], @"[<>"";''()]"))
                     {                        

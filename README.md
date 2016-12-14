@@ -22,7 +22,7 @@ ASP.NET環境を想定しているため、実運用には程遠いです。
 IISは統合モードで実行をしなければならないなど、いくつかの制約があります。  
 FastCGI には部分的に対応していますが、避けられないバグを観測しているため非推奨です。
 
-### 動作確認
+### 動作OS
 
 + Windows Server 2016
 + Windows Server 2012 R2
@@ -36,7 +36,7 @@ FastCGI には部分的に対応していますが、避けられないバグを
 
 XSSの検知のデモサイトを用意しました。  
 ツールレベルであれば全部ブロックするはずです。  
-[ASP.NET XSS Tester](http://hack.vet/xss.ashx)
+[ASP.NET XSS Tester](http://hack.vet/xss)
 
 ## 利用範囲
 

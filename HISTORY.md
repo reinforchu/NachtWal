@@ -4,6 +4,10 @@ Das Anwendungssystem für automatische Verteidigung
 
 ## Versions
 
+### 1.0.1.2
+
+XSS検査の文字数チェックの論理演算子の誤りの修正。
+
 ### 1.0.0.1
 
 初回リリース。  
