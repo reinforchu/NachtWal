@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -10,39 +11,35 @@ namespace NachtWal
     /// </summary>
     public class XSSAuditor
     {
+        private HttpApplication App;
+        private string HttpResponseBody;
 
-        public void CheckXSS()
+        /// <summary>
+        /// Constructor
+        /// Initialize
+        /// </summary>
+        public XSSAuditor()
         {
-            CheckXSSQueryString();
-            CheckXSSBody();
+            HttpResponseBody = String.Empty;
         }
 
-        private void CheckXSSQueryString()
+        public void CheckXSS(HttpApplication Application, string ResponseBody)
         {
-            foreach (string key in Firewall.App.Request.QueryString.Keys)
+            App = Application;
+            HttpResponseBody = ResponseBody;
+            CheckXSSParamValue(this.App.Request.QueryString); // QueryString value
+            CheckXSSParamValue(this.App.Request.Form); // Body value
+        }
+
+        private void CheckXSSParamValue(NameValueCollection Param)
+        {
+            foreach (string key in Param.Keys)
             {
-                if (!String.IsNullOrEmpty(Firewall.App.Request.QueryString[key]) && Firewall.App.Request.QueryString[key].Length > 4)
+                if (!String.IsNullOrEmpty(Param[key]) && Param[key].Length > 4)
                 {
-                    if (Regex.IsMatch(Firewall.App.Request.QueryString[key], @"[<>"";''()]"))
+                    if (Regex.IsMatch(Param[key], @"[<>""=;\\:''()]"))
                     {
-                        if (!String.IsNullOrEmpty(Firewall.HttpResponseBody) && Regex.IsMatch(Firewall.HttpResponseBody, Regex.Escape(HttpUtility.UrlDecode(Firewall.App.Request.QueryString[key]))))
-                        {
-                            XSSProtection();
-                        }
-                    }
-                }
-            }
-        }
-
-        private void CheckXSSBody()
-        {
-            foreach (string key in Firewall.App.Request.Form.Keys)
-            {
-                if (!String.IsNullOrEmpty(Firewall.App.Request.Form[key]) && Firewall.App.Request.Form[key].Length > 4)
-                {
-                    if (Regex.IsMatch(Firewall.App.Request.Form[key], @"[<>"";''()]"))
-                    {                        
-                        if (!String.IsNullOrEmpty(Firewall.HttpResponseBody) && Regex.IsMatch(Firewall.HttpResponseBody, Regex.Escape(HttpUtility.UrlDecode(Firewall.App.Request.Form[key]))))
+                        if (!String.IsNullOrEmpty(this.HttpResponseBody) && Regex.IsMatch(this.HttpResponseBody, Regex.Escape(HttpUtility.UrlDecode(Param[key]))))
                         {
                             XSSProtection();
                         }
@@ -55,16 +52,14 @@ namespace NachtWal
         {
             StringBuilder XSSDetectedHtml = new StringBuilder();
             XSSDetectedHtml.Append("<!DOCTYPE html>\n");
-            XSSDetectedHtml.Append("<html lang=\"en\">\n");
+            XSSDetectedHtml.Append("<html>\n");
             XSSDetectedHtml.Append("\t<head>\n");
-            XSSDetectedHtml.Append("\t\t<meta charset=\"utf-8\" />\n");
-            XSSDetectedHtml.Append("\t\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n");
-            XSSDetectedHtml.Append("\t\t<title>NachtWal</title>\n");
+            XSSDetectedHtml.Append("\t\t<title>XSS Attack Blocked</title>\n");
             XSSDetectedHtml.Append("\t</head>\n");
             XSSDetectedHtml.Append("\t<body>\n");
-            XSSDetectedHtml.Append("\t\t<h1>XSS Attack Detected</h1>\n");
+            XSSDetectedHtml.Append("\t\t<h1>XSS Attack Detected (Possible)</h1>\n");
             XSSDetectedHtml.Append("\t\t<p>This page couldn't be displayed due to security problem.</p>\n");
-            XSSDetectedHtml.Append("\t\t<hr>\n\t\t\t<p><i>NachtWal: Das Anwendungssystem für automatische Verteidigung</i></p>\n");
+            XSSDetectedHtml.Append("\t\t<hr>\n\t\t\t<address>NachtWal: Das Anwendungssystem für automatische Verteidigung</address>\n");
             XSSDetectedHtml.Append("\t</body>\n");
             XSSDetectedHtml.Append("</html>");
             HttpContext.Current.Response.ClearContent();

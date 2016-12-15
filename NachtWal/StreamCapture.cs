@@ -7,7 +7,7 @@ namespace NachtWal
     /// IO Stream Capture
     /// Capturing HTML generated from ASP.NET
     /// http://stackoverflow.com/questions/386487/capturing-html-generated-from-asp-net
-    /// Stack OverflowのAnswer 22を参考にしました。
+    /// ※Answer 22を参考にしました
     /// </summary>
     public class StreamCapture : Stream
     {

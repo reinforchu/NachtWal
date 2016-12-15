@@ -10,8 +10,8 @@ namespace NachtWal
     {
         private HeaderAudtor HeaderAudit;
         private XSSAuditor XSSAudit;
-        public static HttpApplication App;
-        public static string HttpResponseBody;
+        private HttpApplication App;
+        private string HttpResponseBody;
 
         public void Init(HttpApplication context)
         {
@@ -28,7 +28,7 @@ namespace NachtWal
 
         private void OnBeginRequest(object sender, EventArgs e)
         {
-            // string time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+            // string AuditTime = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
         }
 
         private void OnPreRequestHandlerExecute(object sender, EventArgs e)
@@ -40,18 +40,18 @@ namespace NachtWal
         {
             StreamCapture filter = App.Response.Filter as StreamCapture;
             HttpResponseBody = filter.StreamContent;
-            XSSAudit.CheckXSS();
+            XSSAudit.CheckXSS(App, HttpResponseBody);
         }
 
         private void OnPreSendRequestHeaders(object sender, EventArgs e)
         {
-            // Eins.SetCSP(); // XMLの設定ファイルから読み込む実装が必要
+            // HeaderAudit.SetCSP(); // XMLの設定ファイルから読み込む実装が必要
             HeaderAudit.SetContentTypeOptions();
             HeaderAudit.SetFrameOptions();
             if (HttpContext.Current.Request.ServerVariables["HTTPS"] == "on")
             {
                 HeaderAudit.SetHSTS();
-                // Set-Cookie secure attr audit
+                // Set-Cookie secure attribute audit
             }
             HeaderAudit.SetSecureContents();
             HeaderAudit.SetXSSProtection();
@@ -65,7 +65,6 @@ namespace NachtWal
         {
             // Debug
             // App.Response.Write(HttpRuntime.AppDomainAppPath + "\n");
-            // App.Response.Write(HttpRuntime.AppDomainAppVirtualPath + "\n");
             // App.Response.Write(HttpRuntime.BinDirectory + "\n");
         }
 

@@ -10,7 +10,7 @@ namespace NachtWal
 
         public void SetVersionInfo()
         {
-            AddHeader("NachtWal", "1.0.0.1"); // これ自体好ましくない
+            AddHeader("NachtWal", "1.0.2.3");
         }
 
         public void SetCSP()
