@@ -1,9 +1,12 @@
 # NachtWal
 
-IISのセキュリティレベルを高めるマネージモジュール  
-推奨されるセキュリティ設定を強制的(現状)に設定します。  
-簡易的にXSS(Reflected)を検知し防御します。  
-ASP.NET環境を想定しているため、実運用には程遠いです。
+**Reinforced Mitigation Security Filter**  
+**IISの脆弱性緩和モジュール**  
+Webサーバ・アプリケーションとして、推奨されるセキュリティ設定に上書きします。  
+将来的にはポリシーファイルによって、一元管理を想定しています。  
+透過的に動作するため、サーバの設定や環境を汚しません。  
+また、簡易的にXSS(Reflected)を検知し防御します。  
+現在はASP.NETに依存する実装方法のため、導入可能環境が限定的です。
 
 ## Quick Start
 
@@ -20,23 +23,34 @@ ASP.NET環境を想定しているため、実運用には程遠いです。
 
 .NET Framework 2.0 以上かつ、ASP.NET が使用可能な環境の IIS 上で動作します。  
 IISは統合モードで実行をしなければならないなど、いくつかの制約があります。  
-FastCGI には部分的に対応していますが、避けられないバグを観測しているため非推奨です。
+CGIには部分的に対応していますが、避けられないバグを観測しているため非推奨です。
 
-### 動作OS
+### 動作確認表
 
-+ Windows Server 2016
-+ Windows Server 2012 R2
-+ Windows Server 2012
-+ Windows Server 2008 R2
-+ Windows Server 2008
-+ Windows 10 x64
-+ Windows 7 x64
+| OS                     | Check       |
+|:-----------------------|------------:|
+| Windows Server 2016    | Maybe       |
+| Windows Server 2012 R2 | Supported   |
+| Windows Server 2012    | Maybe       |
+| Windows Server 2008 R2 | Maybe       |
+| Windows Server 2008    | Maybe       |
+| Windows Server 2003 R2 | Unsupported |
+| Windows 10             | Supported   |
+| Windows 8.1            | Maybe       |
+| Windows 8              | Maybe       |
+| Windows 7              | Supported   |
+| Windows Vista          | Maybe       |
+| Windows XP             | Unsupported |
 
-## XSS検知のデモ
+※IIS/.NET Framework/ASP.NETのバージョンや、IISの設定による挙動の違いなどが全て把握出来ていません。
+
+## XSSの攻撃検知・防御のデモ
 
 XSSの攻撃検知・防御のデモサイトを用意しました。  
-ツールレベルであれば全部ブロックすると思います。  
-[XSS Attack Demo Site](http://hack.vet/xss)
+BurpやZAPなどのツールレベルであればブロックするかと思います。  
+[XSS Attack Demo Site](http://hack.vet/xss) ※Windows Server 2008 R2  
+まだ実験的な開発段階です。  
+英文などの正常値の入力でも、XSS攻撃の可能性として検知することが非常に多いです。
 
 ## 利用範囲
 

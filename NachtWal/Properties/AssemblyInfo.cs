@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("NachtWal")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("reinforchu")]
-[assembly: AssemblyProduct("NachtWal: Enhanced Mitigation Security Filter")]
+[assembly: AssemblyProduct("NachtWal: Reinforced Mitigation Security Filter")]
 [assembly: AssemblyCopyright("reinforchu")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.2.3")]
-[assembly: AssemblyFileVersion("1.0.2.3")]
+[assembly: AssemblyVersion("1.0.3.4")]
+[assembly: AssemblyFileVersion("1.0.3.4")]

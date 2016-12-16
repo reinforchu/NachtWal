@@ -5,25 +5,26 @@ namespace NachtWal
 {
     /// <summary>
     /// NachtWal: Das Anwendungssystem für automatische Verteidigung “NachtWal” lässt an.
+    /// Reinforced Mitigation Security Filter
     /// </summary>
     public class Firewall : IHttpModule
     {
-        private HeaderAudtor HeaderAudit;
+        public static readonly string AssemblyVersion = "1.0.3.4";
+        private HeaderAuditor HeaderAudit;
         private XSSAuditor XSSAudit;
         private HttpApplication App;
-        private string HttpResponseBody;
+        private string HttpResponseBody = String.Empty;
 
         public void Init(HttpApplication context)
         {
-            HeaderAudit = new HeaderAudtor();
+            HeaderAudit = new HeaderAuditor();
             XSSAudit = new XSSAuditor();
             App = context;
-            HttpResponseBody = String.Empty;
-            context.BeginRequest += new EventHandler(OnBeginRequest);
+            // context.BeginRequest += new EventHandler(OnBeginRequest);
             context.PreRequestHandlerExecute += new EventHandler(OnPreRequestHandlerExecute);
             context.PreSendRequestContent += new EventHandler(OnPreSendRequestContent);
             context.PreSendRequestHeaders += new EventHandler(OnPreSendRequestHeaders);
-            context.EndRequest += new EventHandler(OnEndRequest);
+            // context.EndRequest += new EventHandler(OnEndRequest);
         }
 
         private void OnBeginRequest(object sender, EventArgs e)
@@ -64,8 +65,8 @@ namespace NachtWal
         private void OnEndRequest(object sender, EventArgs e)
         {
             // Debug
-            // App.Response.Write(HttpRuntime.AppDomainAppPath + "\n");
-            // App.Response.Write(HttpRuntime.BinDirectory + "\n");
+            App.Response.Write(HttpRuntime.AppDomainAppPath + "\n");
+            App.Response.Write(HttpRuntime.BinDirectory + "\n");
         }
 
         public void Dispose()

@@ -3,14 +3,14 @@
 namespace NachtWal
 {
     /// <summary>
-    /// Enhanced Mitigation Security Filter
+    /// Reinforce Web security
     /// </summary>
-    public class HeaderAudtor
+    public class HeaderAuditor
     {
 
         public void SetVersionInfo()
         {
-            AddHeader("NachtWal", "1.0.2.3");
+            AddHeader("NachtWal", Firewall.AssemblyVersion);
         }
 
         public void SetCSP()

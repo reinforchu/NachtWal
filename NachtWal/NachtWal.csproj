@@ -39,7 +39,7 @@
   <ItemGroup>
     <Compile Include="Firewall.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="HeaderAudtor.cs" />
+    <Compile Include="HeaderAuditor.cs" />
     <Compile Include="StreamCapture.cs" />
     <Compile Include="XSSAuditor.cs" />
   </ItemGroup>
