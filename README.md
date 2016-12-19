@@ -1,56 +1,82 @@
-# NachtWal
+# NachtWal - Reinforced Mitigation Security Filter
 
-**Reinforced Mitigation Security Filter**  
 **IISの脆弱性緩和モジュール**  
 Webサーバ・アプリケーションとして、推奨されるセキュリティ設定に上書きします。  
-将来的にはポリシーファイルによって、一元管理を想定しています。  
-透過的に動作するため、サーバの設定や環境を汚しません。  
+通信をキャプチャし透過的に動作するため、設定や環境に影響を与えることが少ないです。  
 また、簡易的にXSS(Reflected)を検知し防御します。  
-現在はASP.NETに依存する実装方法のため、導入可能環境が限定的です。
+将来的にはポリシーによる一元管理を構想しています。
 
 ## Quick Start
 
 最新版を [Download](https://github.com/reinforchu/NachtWal/releases) します。
 
-1. C:\inetpub\wwwroot\bin フォルダ(環境によって変わります)へ、NachtWal.dllをコピーします。
-2. IISのマネージャーから対象のWebサイトのモジュールを開きます。
-3. マネージ モジュールを追加を開きます。
-4. 次の通りに入力します。名前「NachtWal」種類「NachtWal.Firewall」
-5. ASP.NET以外は上手く動かない問題を回避するために次をチェックを入れます。「ASP.NET アプリケーションまたは……」
-6. OKを押下します。
+1. C:\inetpub\wwwroot\bin フォルダへ NachtWal.dll をコピーします。
+2. IISマネージャーから対象のWebサイトのモジュール設定を開きます。
+3. 「マネージ モジュールを追加」を開きます。
+4. 次のように入力または選択します。名前「NachtWal」種類「NachtWal.Firewall」
+5. OKを押下しモジュールを有効にします。
+
+DLLのコピー先のパスは環境によって変わります。  
+CGIなどASP.NET以外の環境では十分にテストされていません。  
+予防策として、マネージ モジュールの設定において次をチェックすることを推奨します。  
+「ASP.NET アプリケーションまたはマネージ ハンドラーへの要求のみ呼び出す(&I)」
 
 ## システム要件
 
-.NET Framework 2.0 以上かつ、ASP.NET が使用可能な環境の IIS 上で動作します。  
-IISは統合モードで実行をしなければならないなど、いくつかの制約があります。  
-CGIには部分的に対応していますが、避けられないバグを観測しているため非推奨です。
+.NET Framework 2.0 以上かつ、ASP.NET が使用可能な環境の IIS 上で動作しますが、いくつかの制約があります。  
+CGIには部分的に対応していますが、.NETの制約の問題を確認しているため非推奨です。
 
-### 動作確認表
+### OS/IISバージョン
 
-| OS                     | Check       |
-|:-----------------------|------------:|
-| Windows Server 2016    | Maybe       |
-| Windows Server 2012 R2 | Supported   |
-| Windows Server 2012    | Maybe       |
-| Windows Server 2008 R2 | Maybe       |
-| Windows Server 2008    | Maybe       |
-| Windows Server 2003 R2 | Unsupported |
-| Windows 10             | Supported   |
-| Windows 8.1            | Maybe       |
-| Windows 8              | Maybe       |
-| Windows 7              | Supported   |
-| Windows Vista          | Maybe       |
-| Windows XP             | Unsupported |
+| OS                                     | IIS  | Status      |
+|:---------------------------------------|:-----|------------:|
+| Windows Server 2016    / Windows 10    | 10.0 | Supported   |
+| Windows Server 2012 R2 / Windows 8.1   | 8.5  | Supported   |
+| Windows Server 2012    / Windows 8     | 8.0  | Supported   |
+| Windows Server 2008 R2 / Windows 7     | 7.5  | Supported   |
+| Windows Server 2008    / Windows Vista | 7.0  | Maybe       |
+| Windows Server 2003 R2 / Windows XP    | 6.0  | Unsupported |
 
-※IIS/.NET Framework/ASP.NETのバージョンや、IISの設定による挙動の違いなどが全て把握出来ていません。
+要件を満たした設定であれば、OS/IISのバージョンに依存することなく動作すると思います。
 
-## XSSの攻撃検知・防御のデモ
+### 設定要件
 
-XSSの攻撃検知・防御のデモサイトを用意しました。  
+| Requirements          | Setting     |
+|:----------------------|------------:|
+| ASP.NET               | Enable      |
+| .NET CLR Version      | v2.0 leter  |
+| .NET Extension        | Enable      |
+| Manage pipeline mode  | Integration |
+
+.NET CLR 2.0/4.0 どちらのバージョンでも動作します。  
+IISの機能構成(サーバーマネージャー)とIISマネージャー(コンピュータの管理)から設定・確認が可能です。
+
+## デモ環境
+
+本モジュールが動作している、XSS攻撃の検知・防御のデモサイトを用意しました。  
 BurpやZAPなどのツールレベルであればブロックするかと思います。  
-[XSS Attack Demo Site](http://hack.vet/xss) ※Windows Server 2008 R2  
-まだ実験的な開発段階です。  
-英文などの正常値の入力でも、XSS攻撃の可能性として検知することが非常に多いです。
+[XSS Attack Demo Site](http://hack.vet/xss) ※IIS 7.5  
+XSS攻撃の検知・防御機能は、まだ実験的です。  
+偽陽性を減らす検知ロジックを実装中です。しかしながら、偽陰性が増えることになると思います。  
+※旧検知方法は「Lunatic」という設定名で残します。  
+Storedはそのうち実装します。
+
+### XSS Audit interception fields
+
+| Fields                | Status      |
+|:----------------------|------------:|
+| QueryString Key/Value | Supported   |
+| Body        Key/Value | Supported   |
+| Cookie      Key/Value | Future      |
+| JSON        Key/Value | Future      |
+| Base64 encoded params | Unsupported |
+| Path separate  param  | Unsupported |
+| Some header fields    | Unsupported |
+| UserAgent   field     | Future      |
+| Referer     field     | Future      |
+| ViewState             | Unsupported |
+
+**CGI環境は、ASP.NETの仕様上の問題によりBodyは非対応です。**
 
 ## 利用範囲
 

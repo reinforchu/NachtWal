@@ -1,6 +1,4 @@
-# NachtWal
-
-**Das Anwendungssystem für automatische Verteidigung**
+# NachtWal: Das Anwendungssystem für automatische Verteidigung
 
 ## Versions
 
@@ -22,6 +20,21 @@ XSS検査の文字数チェックの論理演算子の誤りを改修しまし�
 ### 1.0.0.1
 
 初回リリース。  
+
+### 採番基準
+
+| 1     | 0     | 0     | 0   |
+|:------|:------|:------|:----|
+| Major | Minor | Build | Fix |
+
+### 開発ステータス
+
+| Status | Nightly       | Dev       | Stable    |
+|:------ |:--------------|:----------|:----------|
+| Alpha  | Alpha/Nightly | Alpha/Dev | -         |
+| Beta   | Beta/Nightly  | Beta/Dev  | -         |
+| RC     | -             | RC/Dev    | RC/Stable |
+| Stable | -             | -         | Stable    |
 
 ## Futures
 
