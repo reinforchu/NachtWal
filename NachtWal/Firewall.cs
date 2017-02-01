@@ -5,31 +5,30 @@ namespace NachtWal
 {
     /// <summary>
     /// NachtWal: Das Anwendungssystem für automatische Verteidigung “NachtWal” lässt an.
-    /// Reinforced Mitigation Security Filter
+    /// Reinforce Web Security
     /// </summary>
     public class Firewall : IHttpModule
     {
-        public static readonly string AssemblyVersion = "1.0.3.4";
         private HeaderAuditor HeaderAudit;
         private XSSAuditor XSSAudit;
         private HttpApplication App;
-        private string HttpResponseBody = String.Empty;
+        private string HttpResponseBody;
 
         public void Init(HttpApplication context)
         {
             HeaderAudit = new HeaderAuditor();
             XSSAudit = new XSSAuditor();
             App = context;
-            // context.BeginRequest += new EventHandler(OnBeginRequest);
+            HttpResponseBody = String.Empty;
+            context.BeginRequest += new EventHandler(OnBeginRequest);
             context.PreRequestHandlerExecute += new EventHandler(OnPreRequestHandlerExecute);
             context.PreSendRequestContent += new EventHandler(OnPreSendRequestContent);
             context.PreSendRequestHeaders += new EventHandler(OnPreSendRequestHeaders);
-            // context.EndRequest += new EventHandler(OnEndRequest);
         }
 
         private void OnBeginRequest(object sender, EventArgs e)
         {
-            // string AuditTime = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+            string AuditTime = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
         }
 
         private void OnPreRequestHandlerExecute(object sender, EventArgs e)
@@ -52,21 +51,13 @@ namespace NachtWal
             if (HttpContext.Current.Request.ServerVariables["HTTPS"] == "on")
             {
                 HeaderAudit.SetHSTS();
-                // Set-Cookie secure attribute audit
             }
             HeaderAudit.SetSecureContents();
             HeaderAudit.SetXSSProtection();
             HeaderAudit.RemoveServer();
             HeaderAudit.RemoveAspNetVersion();
             HeaderAudit.RemoveProwerdBy();
-            HeaderAudit.SetVersionInfo();
-        }
-
-        private void OnEndRequest(object sender, EventArgs e)
-        {
-            // Debug
-            App.Response.Write(HttpRuntime.AppDomainAppPath + "\n");
-            App.Response.Write(HttpRuntime.BinDirectory + "\n");
+            if (CurrentConfiguration.ProductBanner) HeaderAudit.SetProductBanner();
         }
 
         public void Dispose()

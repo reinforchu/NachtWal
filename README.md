@@ -1,30 +1,30 @@
-# NachtWal - Reinforced Mitigation Security Filter
+# NachtWal - 自動防衛運用システム
 
-**IISの脆弱性緩和モジュール**  
+**IIS用の脆弱性緩和モジュール**  
 Webサーバ・アプリケーションとして、推奨されるセキュリティ設定に上書きします。  
-通信をキャプチャし透過的に動作するため、設定や環境に影響を与えることが少ないです。  
+通信をキャプチャし透過的に動作するため、既存の設定や環境に影響を与えません。  
 また、簡易的にXSS(Reflected)を検知し防御します。  
-将来的にはポリシーによる一元管理を構想しています。
+今後、ポリシーによる一元管理を実装予定です。
 
 ## Quick Start
 
 最新版を [Download](https://github.com/reinforchu/NachtWal/releases) します。
 
-1. C:\inetpub\wwwroot\bin フォルダへ NachtWal.dll をコピーします。
+1. C:\inetpub\wwwroot\bin ディレクトリへ NachtWal.dll をコピーします。
 2. IISマネージャーから対象のWebサイトのモジュール設定を開きます。
 3. 「マネージ モジュールを追加」を開きます。
 4. 次のように入力または選択します。名前「NachtWal」種類「NachtWal.Firewall」
 5. OKを押下しモジュールを有効にします。
 
-DLLのコピー先のパスは環境によって変わります。  
+DLLのコピー先のパスは環境によって変わります。(ルート直下の \bin ディレクトリです)  
 CGIなどASP.NET以外の環境では十分にテストされていません。  
-予防策として、マネージ モジュールの設定において次をチェックすることを推奨します。  
-「ASP.NET アプリケーションまたはマネージ ハンドラーへの要求のみ呼び出す(&I)」
+安定性を重視する場合、マネージ モジュールの設定において次をチェックすることを推奨します。  
+「ASP.NET アプリケーションまたはマネージ ハンドラーへの要求のみ呼び出す(&I)」  
+この場合、CGIと同時に静的ファイルなどにも適用されないことにご注意ください。
 
 ## システム要件
 
-.NET Framework 2.0 以上かつ、ASP.NET が使用可能な環境の IIS 上で動作しますが、いくつかの制約があります。  
-CGIには部分的に対応していますが、.NETの制約の問題を確認しているため非推奨です。
+.NET Framework 2.0 以上かつ、ASP.NET が使用可能な環境の IIS 上で動作します。
 
 ### OS/IISバージョン
 
@@ -39,12 +39,12 @@ CGIには部分的に対応していますが、.NETの制約の問題を確認�
 
 要件を満たした設定であれば、OS/IISのバージョンに依存することなく動作すると思います。
 
-### 設定要件
+### 動作に必要な設定
 
 | Requirements          | Setting     |
 |:----------------------|------------:|
 | ASP.NET               | Enable      |
-| .NET CLR Version      | v2.0 leter  |
+| .NET CLR Version      | v2.0 later  |
 | .NET Extension        | Enable      |
 | Manage pipeline mode  | Integration |
 
@@ -56,9 +56,8 @@ IISの機能構成(サーバーマネージャー)とIISマネージャー(コ�
 本モジュールが動作している、XSS攻撃の検知・防御のデモサイトを用意しました。  
 BurpやZAPなどのツールレベルであればブロックするかと思います。  
 [XSS Attack Demo Site](http://hack.vet/xss) ※IIS 7.5  
-XSS攻撃の検知・防御機能は、まだ実験的です。  
-偽陽性を減らす検知ロジックを実装中です。しかしながら、偽陰性が増えることになると思います。  
-※旧検知方法は「Lunatic」という設定名で残します。  
+[デモサイトのソースコード](https://github.com/reinforchu/NachtWal/blob/master/xss/XSSAttackDemoSite.ashx)  
+XSS攻撃の検知・防御機能は、まだ実験的です。   
 Storedはそのうち実装します。
 
 ### XSS Audit interception fields
@@ -77,6 +76,22 @@ Storedはそのうち実装します。
 | ViewState             | Unsupported |
 
 **CGI環境は、ASP.NETの仕様上の問題によりBodyは非対応です。**
+
+### XSS攻撃の各検知方法の精度(感覚)
+
+| Accuracy   | False Positive | False Negative |
+|:-----------|:--------------:|:--------------:|
+| Reflected | Bad            | Good           |
+| Point     | Medium         | Medium         |
+
+Reflected: XSS攻撃の可能性のある文字が、Reflectedするかしないかで真偽を決定する検知方法です。  
+可能性として検知されたものは全てブロックするため、False Positive が非常に多いです。  
+しかしながら、False Negative が限りなく最小になります。  
+　  
+Point: XSS攻撃のシグネチャにマッチするかしないかを検査し、点数加算方式で評価する検知方法です。  
+複数の攻撃シグネチャをベースに、XSS攻撃あるかどうかの傾向を数値化し評価します。  
+ただしパターンマッチによる検査のため、高度な攻撃によっては検知できないケースがあります。  
+可能性のとして検知されたものから誤検知を排除するため、False Positive は少なくなります。
 
 ## 利用範囲
 

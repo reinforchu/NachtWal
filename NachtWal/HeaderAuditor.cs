@@ -3,14 +3,15 @@
 namespace NachtWal
 {
     /// <summary>
-    /// Reinforce Web security
+    /// Vulnerability mitigation secure settings
     /// </summary>
     public class HeaderAuditor
     {
 
-        public void SetVersionInfo()
+        public void SetProductBanner()
         {
-            AddHeader("NachtWal", Firewall.AssemblyVersion);
+            AddHeader("X-Powerd-By", AssemblyInformation.Name);
+            AddHeader("X-" + AssemblyInformation.Name + "-Version", AssemblyInformation.Version + " " + AssemblyInformation.Release);
         }
 
         public void SetCSP()
@@ -53,6 +54,7 @@ namespace NachtWal
         public void RemoveAspNetVersion()
         {
             RemoveHeader("X-AspNet-Version");
+            RemoveHeader("X-AspNetMvc-Version");
         }
 
         public void RemoveProwerdBy()

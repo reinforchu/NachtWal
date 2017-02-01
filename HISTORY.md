@@ -1,13 +1,20 @@
-# NachtWal: Das Anwendungssystem für automatische Verteidigung
+# NachtWal - Reinforced Mitigation Security Filter
 
 ## Versions
+
+### 1.1.5.0
+
+バージョン採番基準と開発フェーズを明確に定義しました。  
+「X-AspNetMvc-Version」を除去するよう実装しました。
+このほか、いくつかのコード整形を行いました。  
 
 ### 1.0.3.4
 
 QueryStringおよびBodyのkey名も検査するように実装しました。  
 URLデコードするコードが残っていたため、Anti-XSSがバイパスされてしまう問題を改修しました。  
-情報提供：mageさん([@mage_1868](https://twitter.com/mage_1868)) [Issue](https://twitter.com/mage_1868/status/809643608978571268)  
-情報提供にあたって、この場を借りて感謝申し上げます。
+ご報告いただきました、mageさんに感謝申し上げます。  
+Reporter: mageさん([@mage_1868](https://twitter.com/mage_1868))  
+Issue: [https://twitter.com/mage_1868/status/809643608978571268](https://twitter.com/mage_1868/status/809643608978571268)
 
 ### 1.0.2.3
 
@@ -21,28 +28,28 @@ XSS検査の文字数チェックの論理演算子の誤りを改修しまし�
 
 初回リリース。  
 
-### 採番基準
+## 採番基準
 
 | 1     | 0     | 0     | 0   |
 |:------|:------|:------|:----|
 | Major | Minor | Build | Fix |
 
-### 開発ステータス
+## 開発フェーズ表
 
-| Status | Nightly       | Dev       | Stable    |
-|:------ |:--------------|:----------|:----------|
-| Alpha  | Alpha/Nightly | Alpha/Dev | -         |
-| Beta   | Beta/Nightly  | Beta/Dev  | -         |
-| RC     | -             | RC/Dev    | RC/Stable |
-| Stable | -             | -         | Stable    |
+| Status |
+|:------ |
+| Alpha  |
+| Beta   |
+| RC     |
+| Stable |
 
 ## Futures
 
-* StoredのXSSを検知させる(実装可能)
-* XMLで設定ファイルの読み込み
-* Set-Cookieのセキュリティ設定
-* StackTraceやエラーページの抑制
-* ロギング機能の実装
-* しっかりとした例外処理の実装
-* テキスト以外のリクエストの際にException吐く問題を改修
-* CGI環境でもある程度動くようにする
+* StoredのXSS攻撃を検知させる実装をする(データをPoolさせるメモリを確保することで実装可能)
+* XMLで設定ファイル(ポリシー)の読み込みを実装する
+* Set-Cookieのセキュリティ設定を高められるように実装する
+* StackTraceやエラーページの抑制する
+* ロギング機能の実装する
+* 真面目に例外処理の実装をする
+* XSS攻撃の検知方法を機械学習で実装する
+* ブラックリスト・ホワイトリストを実装する
