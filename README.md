@@ -34,7 +34,7 @@ CGIなどASP.NET以外の環境では十分にテストされていません。
 | Windows Server 2012 R2 / Windows 8.1   | 8.5  | Supported   |
 | Windows Server 2012    / Windows 8     | 8.0  | Supported   |
 | Windows Server 2008 R2 / Windows 7     | 7.5  | Supported   |
-| Windows Server 2008    / Windows Vista | 7.0  | Maybe       |
+| Windows Server 2008    / Windows Vista | 7.0  | Supported   |
 | Windows Server 2003 R2 / Windows XP    | 6.0  | Unsupported |
 
 要件を満たした設定であれば、OS/IISのバージョンに依存することなく動作すると思います。
@@ -81,8 +81,8 @@ Storedはそのうち実装します。
 
 | Accuracy   | False Positive | False Negative |
 |:-----------|:--------------:|:--------------:|
-| Reflected | Bad            | Good           |
-| Point     | Medium         | Medium         |
+| Reflected  | Bad            | Good           |
+| Point      | Medium         | Medium         |
 
 Reflected: XSS攻撃の可能性のある文字が、Reflectedするかしないかで真偽を決定する検知方法です。  
 可能性として検知されたものは全てブロックするため、False Positive が非常に多いです。  
@@ -96,6 +96,12 @@ Point: XSS攻撃のシグネチャにマッチするかしないかを検査し�
 ## 利用範囲
 
 どなたでもお使いいただけます。
+
+## 一部の権利者様へ
+
+IISプラットフォーム上での開発プロジェクトに携わりましたが、構想・アルゴリズム・ソースコードは異なるものです。  
+ソースコードの類似性(コーディング方法・コードの流用など)はなく、アルゴリズムも異なるものを採用しています。  
+独自研究、オープンソースコミュニティへの貢献、サイバーセキュリティ活動を目的としています。
 
 ## Contact
 
