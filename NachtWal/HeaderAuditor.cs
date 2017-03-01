@@ -10,7 +10,8 @@ namespace NachtWal
 
         public void SetProductBanner()
         {
-            AddHeader("X-Powered-By", AssemblyInformation.Name + "/" + AssemblyInformation.Version);
+            AddHeader("X-Powerd-By", AssemblyInformation.Name);
+            AddHeader("X-" + AssemblyInformation.Name + "-Version", AssemblyInformation.Version + " " + AssemblyInformation.Release);
         }
 
         public void SetCSP()
@@ -50,21 +51,15 @@ namespace NachtWal
             RemoveHeader("Server");
         }
 
-        public void RemoveEtag()
-        {
-            RemoveHeader("Etag");
-        }
-
         public void RemoveAspNetVersion()
         {
             RemoveHeader("X-AspNet-Version");
             RemoveHeader("X-AspNetMvc-Version");
         }
 
-        public void RemovePoweredBy()
+        public void RemoveProwerdBy()
         {
             RemoveHeader("X-Powered-By");
-            // Issue #1 https://github.com/reinforchu/NachtWal/issues/1
         }
 
         private void AddHeader(string field, string value)

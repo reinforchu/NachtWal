@@ -7,6 +7,7 @@
     {
         public static readonly string Name = "NachtWal";
         public static readonly string Release = "Alpha";
-        public static readonly string Version = "1.1.6.1";
+        public static readonly string Version = "1.1.5.0";
+        public static readonly string Developer = "reinforchu";
     }
 }

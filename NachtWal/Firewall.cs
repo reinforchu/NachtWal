@@ -55,9 +55,8 @@ namespace NachtWal
             HeaderAudit.SetSecureContents();
             HeaderAudit.SetXSSProtection();
             HeaderAudit.RemoveServer();
-            HeaderAudit.RemoveEtag();
             HeaderAudit.RemoveAspNetVersion();
-            HeaderAudit.RemovePoweredBy();
+            HeaderAudit.RemoveProwerdBy();
             if (CurrentConfiguration.ProductBanner) HeaderAudit.SetProductBanner();
         }
 
