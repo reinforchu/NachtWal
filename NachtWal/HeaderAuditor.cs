@@ -10,7 +10,7 @@ namespace NachtWal
 
         public void SetProductBanner()
         {
-            AddHeader("X-Powered-By", AssemblyInformation.Name + "/" + AssemblyInformation.Version);
+            AddHeader("X-Security-By", AssemblyInformation.Name + "/" + AssemblyInformation.Version);
         }
 
         public void SetCSP()

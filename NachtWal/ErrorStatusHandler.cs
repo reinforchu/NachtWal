@@ -1,36 +1,30 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Text;
 using System.Web;
 
 namespace NachtWal
 {
     /// <summary>
-    /// Anti-XSS Attack
+    /// Hide HTTP Error Page
     /// </summary>
-    partial class XSSAuditor
+   public class ErrorStatusHandler
     {
-        private HttpApplication App;
-        private string HttpResponseBody = String.Empty;
-
-        public void CheckXSS(HttpApplication Application, string ResponseBody)
+        public void CheckHTTPStatus()
         {
-            App = Application;
-            HttpResponseBody = ResponseBody;
-            CheckXSSKeyValue(this.App.Request.QueryString); // QueryString
-            CheckXSSKeyValue(this.App.Request.Form); // Body
-        }
-
-        private void CheckXSSKeyValue(NameValueCollection Param)
-        {
-            foreach (string key in Param.Keys)
+            int StatusCode = 100;
+            StatusCode = HttpContext.Current.Response.StatusCode;
+            if (StatusCode == 502)
             {
-                XSSReflected(key); // Key
-                XSSReflected(Param[key]); // Value
-            }
+                try {
+                    HTTPResponseRewrite("Bad Request", StatusCode.ToString() + " Error message suppression", "An error message with unsafe content has been detected.");
+                } catch (Exception e) {
+                    HTTPResponseRewrite("Critical stop error", "Module error (Audit Exception)", "This page couldn't be displayed due to a fatal error.");
+                    Console.WriteLine(e.ToString()); // 後々エラーログ機能を実装して出力する
+                    }
+                }
         }
 
-        private void ResponseRewrite(string Title, string Head, string Message)
+        private void HTTPResponseRewrite(string Title, string Head, string Message)
         {
             StringBuilder Body = new StringBuilder();
             Body.Append("<!DOCTYPE html>\n");
@@ -49,9 +43,5 @@ namespace NachtWal
             HttpContext.Current.Response.Write(Body);
         }
 
-        public void Dispose()
-        {
-            HttpResponseBody = String.Empty;
-        }
     }
 }

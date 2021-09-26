@@ -11,6 +11,7 @@ namespace NachtWal
     {
         private HeaderAuditor HeaderAudit;
         private XSSAuditor XSSAudit;
+        private ErrorStatusHandler ErrorPage;
         private HttpApplication App;
         private string HttpResponseBody;
 
@@ -18,6 +19,7 @@ namespace NachtWal
         {
             HeaderAudit = new HeaderAuditor();
             XSSAudit = new XSSAuditor();
+            ErrorPage = new ErrorStatusHandler();
             App = context;
             HttpResponseBody = String.Empty;
             context.BeginRequest += new EventHandler(OnBeginRequest);
@@ -38,13 +40,17 @@ namespace NachtWal
 
         private void OnPreSendRequestContent(object sender, EventArgs e)
         {
-            StreamCapture filter = App.Response.Filter as StreamCapture;
-            HttpResponseBody = filter.StreamContent;
-            XSSAudit.CheckXSS(App, HttpResponseBody);
+            if (HttpContext.Current.Response.StatusCode != 502 && HttpContext.Current.Response.StatusCode != 404) // 暫定対応
+            {
+                StreamCapture filter = App.Response.Filter as StreamCapture;
+                HttpResponseBody = filter.StreamContent;
+                XSSAudit.CheckXSS(App, HttpResponseBody);
+            }
         }
 
         private void OnPreSendRequestHeaders(object sender, EventArgs e)
         {
+            ErrorPage.CheckHTTPStatus(); // 必要がない場合はコメントアウトしてください
             // HeaderAudit.SetCSP(); // XMLの設定ファイルから読み込む実装が必要
             HeaderAudit.SetContentTypeOptions();
             HeaderAudit.SetFrameOptions();
